@@ -3,6 +3,7 @@ package simulation;
 public class AgentBuilder {
 
     private Strategy strategy;
+    private int size;
 
     public AgentBuilder() {
     }
@@ -15,6 +16,11 @@ public class AgentBuilder {
 
 
     public Agent built() {
-        return new Agent(strategy);
+        return new Agent(strategy, size);
+    }
+
+    public AgentBuilder withSize(int size) {
+        this.size = size;
+        return this;
     }
 }

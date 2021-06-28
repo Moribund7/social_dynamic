@@ -1,4 +1,5 @@
 import simulation.Agent;
+import simulation.AgentBuilder;
 import simulation.Strategy;
 
 import java.util.Collection;
@@ -11,6 +12,7 @@ public class PopulationBuilder {
     private Strategy strategy;
     private double ratio;
     private Strategy secondStrategy;
+    private final AgentBuilder agentBuilder = new AgentBuilder().withSize(10);
 
     public PopulationBuilder() {
     }
@@ -31,9 +33,9 @@ public class PopulationBuilder {
         double numberOfAgentWithStrategy = Math.floor(size * ratio);
         for (int i = 0; i < size; i++) {
             if (i < numberOfAgentWithStrategy) {
-                population.add(new Agent(strategy));
+                population.add(agentBuilder.withStrategy(strategy).built());
             } else {
-                population.add(new Agent(secondStrategy));
+                population.add(agentBuilder.withStrategy(secondStrategy).built());
             }
 
         }

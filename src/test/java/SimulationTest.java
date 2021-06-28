@@ -10,6 +10,7 @@ import static simulation.Strategy.NONCOOPERATIVE;
 public class SimulationTest {
 
     public static final int POPULATION_SIZE = 10;
+    public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
 
     @Test
     public void test() {
@@ -18,9 +19,8 @@ public class SimulationTest {
 
     @Test
     public void createAgent() {
-        AgentBuilder agentBuilder = new AgentBuilder();
 
-        Agent a = agentBuilder.withStrategy(COOPERATIVE).built();
+        Agent a = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
 
         assertEquals(COOPERATIVE, a.getStrategy());
     }
@@ -48,6 +48,18 @@ public class SimulationTest {
         int numberOfCooperativeAgents = (int) (POPULATION_SIZE * COOPERATIVE_RATIO);
         assertEquals(numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(COOPERATIVE));
 
+
+    }
+
+    @Test
+    public void resolveStrategies() {
+        Agent cooperative1 = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
+        Agent cooperative2 = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
+        AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver();
+
+        agentInteractionResolver.resolveInteraction(cooperative1, cooperative2);
+        assertEquals(100, cooperative1.getSize());
+        assertEquals(100, cooperative1.getSize());
 
     }
 }
