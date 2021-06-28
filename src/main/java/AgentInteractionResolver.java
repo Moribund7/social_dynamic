@@ -5,7 +5,12 @@ import java.util.Map;
 
 public class AgentInteractionResolver {
 
-    public static final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX = Map.of(Strategy.COOPERATIVE, Map.of(Strategy.COOPERATIVE, 100));
+    public final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX;
+
+    public AgentInteractionResolver(Map<Strategy, Map<Strategy, Integer>> payoff_matrix) {
+        PAYOFF_MATRIX = payoff_matrix;
+    }
+
 
     public void resolveInteraction(Agent agent1, Agent agent2) {
 

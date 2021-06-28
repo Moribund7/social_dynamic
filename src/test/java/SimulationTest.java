@@ -1,6 +1,9 @@
 import org.junit.Test;
 import simulation.Agent;
 import simulation.AgentBuilder;
+import simulation.Strategy;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,6 +14,8 @@ public class SimulationTest {
 
     public static final int POPULATION_SIZE = 10;
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
+    private static final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX = Map.of(Strategy.COOPERATIVE, Map.of(Strategy.COOPERATIVE, 100, NONCOOPERATIVE, 0),
+            NONCOOPERATIVE, Map.of(COOPERATIVE, 300, NONCOOPERATIVE, 50));
 
     @Test
     public void test() {
@@ -55,11 +60,40 @@ public class SimulationTest {
     public void resolveStrategies() {
         Agent cooperative1 = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
         Agent cooperative2 = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
-        AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver();
+        AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
 
         agentInteractionResolver.resolveInteraction(cooperative1, cooperative2);
         assertEquals(100, cooperative1.getSize());
         assertEquals(100, cooperative1.getSize());
 
     }
+
+    @Test
+    public void resolveStrategiesCooperativeVsNonCooperative() {
+        Agent cooperative = AGENT_BUILDER.withStrategy(COOPERATIVE).built();
+        Agent nonCooperative = AGENT_BUILDER.withStrategy(NONCOOPERATIVE).built();
+        AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
+
+        agentInteractionResolver.resolveInteraction(cooperative, nonCooperative);
+        assertEquals(0, cooperative.getSize());
+        assertEquals(300, nonCooperative.getSize());
+
+        //check if resolveInteraction is commutative
+        agentInteractionResolver.resolveInteraction(nonCooperative, cooperative);
+        assertEquals(0, cooperative.getSize());
+        assertEquals(600, nonCooperative.getSize());
+    }
+
+    @Test
+    public void resolveStrategiesNonCooperativeVsNonCooperative() {
+        Agent nonCooperative1 = AGENT_BUILDER.withStrategy(NONCOOPERATIVE).built();
+        Agent nonCooperative2 = AGENT_BUILDER.withStrategy(NONCOOPERATIVE).built();
+        AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
+
+        agentInteractionResolver.resolveInteraction(nonCooperative1, nonCooperative2);
+        assertEquals(50, nonCooperative1.getSize());
+        assertEquals(50, nonCooperative2.getSize());
+
+    }
+
 }
