@@ -96,4 +96,12 @@ public class SimulationTest {
 
     }
 
+    @Test
+    public void initializeSimulation() {
+        Simulation simulation = Simulation.initializeFromPropertiesFile("aaa"); // TODO rename properties file
+        assertEquals(simulation.population.getSize(), 10);
+        assertEquals(simulation.population.getAgentsNumberWithStrategy(COOPERATIVE), 10);
+
+    }
+
 }
