@@ -1,7 +1,10 @@
-import simulation.Agent;
-import simulation.Strategy;
+package com.kowafi.socialDynamics;
+
+import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.simulation.Strategy;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Population {
 
@@ -19,5 +22,9 @@ public class Population {
 
     public long getAgentsNumberWithStrategy(Strategy strategy) {
         return population.stream().filter(agent -> agent.getStrategy().equals(strategy)).count();
+    }
+
+    public List<Agent> getAgentsAsList() {
+        return List.copyOf(population);
     }
 }

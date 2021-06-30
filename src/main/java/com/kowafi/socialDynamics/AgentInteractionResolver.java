@@ -1,5 +1,7 @@
-import simulation.Agent;
-import simulation.Strategy;
+package com.kowafi.socialDynamics;
+
+import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.simulation.Strategy;
 
 import java.util.Map;
 

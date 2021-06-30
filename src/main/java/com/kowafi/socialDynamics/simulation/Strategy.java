@@ -1,4 +1,4 @@
-package simulation;
+package com.kowafi.socialDynamics.simulation;
 
 public enum Strategy {
     COOPERATIVE,

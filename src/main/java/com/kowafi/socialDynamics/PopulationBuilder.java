@@ -1,6 +1,8 @@
-import simulation.Agent;
-import simulation.AgentBuilder;
-import simulation.Strategy;
+package com.kowafi.socialDynamics;
+
+import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.simulation.AgentBuilder;
+import com.kowafi.socialDynamics.simulation.Strategy;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -1,14 +1,18 @@
+import com.kowafi.socialDynamics.AgentInteractionResolver;
+import com.kowafi.socialDynamics.Population;
+import com.kowafi.socialDynamics.PopulationBuilder;
+import com.kowafi.socialDynamics.Simulation;
+import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.simulation.AgentBuilder;
+import com.kowafi.socialDynamics.simulation.Strategy;
 import org.junit.Test;
-import simulation.Agent;
-import simulation.AgentBuilder;
-import simulation.Strategy;
 
 import java.util.Map;
 
+import static com.kowafi.socialDynamics.simulation.Strategy.COOPERATIVE;
+import static com.kowafi.socialDynamics.simulation.Strategy.NONCOOPERATIVE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static simulation.Strategy.COOPERATIVE;
-import static simulation.Strategy.NONCOOPERATIVE;
 
 public class SimulationTest {
 
@@ -16,6 +20,10 @@ public class SimulationTest {
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
     private static final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX = Map.of(Strategy.COOPERATIVE, Map.of(Strategy.COOPERATIVE, 100, NONCOOPERATIVE, 0),
             NONCOOPERATIVE, Map.of(COOPERATIVE, 300, NONCOOPERATIVE, 50));
+
+    private static Simulation getBasicSimulation() {
+        return Simulation.initializeFromPropertiesFile("aaa");
+    }
 
     @Test
     public void test() {
@@ -98,10 +106,20 @@ public class SimulationTest {
 
     @Test
     public void initializeSimulation() {
-        Simulation simulation = Simulation.initializeFromPropertiesFile("aaa"); // TODO rename properties file
+        Simulation simulation = getBasicSimulation(); // TODO rename properties file
         assertEquals(simulation.population.getSize(), 10);
         assertEquals(simulation.population.getAgentsNumberWithStrategy(COOPERATIVE), 10);
 
     }
 
+    @Test
+    public void runBasicSimulation() {
+        Simulation simulation = getBasicSimulation();
+
+        simulation.run(10);
+
+        assertEquals(10, simulation.getNumberOfIterations());
+    }
+
+    //TODO test observer
 }

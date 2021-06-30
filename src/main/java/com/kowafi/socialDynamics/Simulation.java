@@ -1,11 +1,18 @@
-import simulation.Strategy;
+package com.kowafi.socialDynamics;
+
+import com.kowafi.socialDynamics.observers.Observer;
+import com.kowafi.socialDynamics.simulation.Strategy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 
 public class Simulation {
+    private final Collection<Observer> observers = Collections.emptyList();
     public Population population;
+    private int numberOfIterations = 0;
 
     public static void main(String[] args) {
         System.out.println("Hello world!");
@@ -15,8 +22,7 @@ public class Simulation {
         this.population = population;
     }
 
-    public static Simulation initializeFromPropertiesFile(String fileName
-    ) {
+    public static Simulation initializeFromPropertiesFile(String fileName) {
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
@@ -33,5 +39,30 @@ public class Simulation {
 
         return new Simulation(populationBuilder.build());
 
+    }
+
+    public int getNumberOfIterations() {
+        return numberOfIterations;
+    }
+
+    public Population getPopulation() {
+        return population;
+    }
+
+    public void addObserver(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    public void run(int numberOfIterations) {
+        for (int iteration = 0; iteration < numberOfIterations; iteration++) {
+            this.numberOfIterations += 1;
+
+            //TODO add body to resolve interactions
+
+
+            for (Observer observer : observers) {
+                observer.observe(this);
+            }
+        }
     }
 }
