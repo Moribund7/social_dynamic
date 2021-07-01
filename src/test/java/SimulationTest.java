@@ -1,19 +1,24 @@
-import com.kowafi.socialDynamics.AgentInteractionResolver;
-import com.kowafi.socialDynamics.Population;
-import com.kowafi.socialDynamics.PopulationBuilder;
-import com.kowafi.socialDynamics.Simulation;
+import com.kowafi.socialDynamics.*;
+import com.kowafi.socialDynamics.observers.Observer;
+import com.kowafi.socialDynamics.observers.TotalPopulationValueObserver;
 import com.kowafi.socialDynamics.simulation.Agent;
 import com.kowafi.socialDynamics.simulation.AgentBuilder;
 import com.kowafi.socialDynamics.simulation.Strategy;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.kowafi.socialDynamics.simulation.Strategy.COOPERATIVE;
 import static com.kowafi.socialDynamics.simulation.Strategy.NONCOOPERATIVE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SimulationTest {
 
     public static final int POPULATION_SIZE = 10;
@@ -121,5 +126,26 @@ public class SimulationTest {
         assertEquals(10, simulation.getNumberOfIterations());
     }
 
-    //TODO test observer
+    @Mock
+    Simulation simulation;
+
+    @Mock
+    Population population;
+
+
+    @Test
+    public void testBasicObserver() {
+        Observer observer = new TotalPopulationValueObserver();
+        when(simulation.getPopulation()).thenReturn(population);
+        when(simulation.getNumberOfIterations()).thenReturn(1);
+        AgentBuilder agentBuilder = new AgentBuilder();
+        agentBuilder.withSize(10);
+        List<Agent> agentList = List.of(agentBuilder.built(), agentBuilder.built(), agentBuilder.built());
+        when(population.getAgentsAsList()).thenReturn(agentList);
+
+        observer.observe(simulation);
+
+        IterationStatistics iterationStatistics = SimulationStatistics.getIteration(1);
+        assertEquals(30, iterationStatistics.getTotalPopulationValue());
+    }
 }
