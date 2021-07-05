@@ -38,8 +38,8 @@ public class Simulation {
         for (int iteration = 0; iteration < numberOfIterations; iteration++) {
             this.numberOfIterations += 1;
 
-//            AgentPair agentPair = agentSelector.selectAgentPair(population);
-//            agentInteractionResolver.resolveInteraction(agentPair.getFirst(), agentPair.getSecond());
+            AgentPair agentPair = agentSelector.selectAgentPair(population);
+            agentInteractionResolver.resolveInteraction(agentPair.getFirst(), agentPair.getSecond());
 
             for (Observer observer : observers) {
                 observer.observe(this);

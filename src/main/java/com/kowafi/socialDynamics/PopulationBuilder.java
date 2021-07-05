@@ -14,7 +14,7 @@ public class PopulationBuilder {
     private Strategy strategy;
     private double ratio;
     private Strategy secondStrategy;
-    private final AgentBuilder agentBuilder = new AgentBuilder().withSize(10);
+    private final AgentBuilder agentBuilder = new AgentBuilder();
 
     public PopulationBuilder() {
     }
@@ -27,6 +27,11 @@ public class PopulationBuilder {
     public PopulationBuilder withStrategyRatio(Strategy strategy, double ratio) {
         this.strategy = strategy;
         this.ratio = ratio;
+        return this;
+    }
+
+    public PopulationBuilder withAgentSize(int size) {
+        agentBuilder.withSize(size);
         return this;
     }
 
