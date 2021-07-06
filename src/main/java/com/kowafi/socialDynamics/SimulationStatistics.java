@@ -12,4 +12,8 @@ public class SimulationStatistics {
         }
         return iterationsStatistics.get(numberOfIterations - 1);
     }
+
+    public static int getNumberOfIterations() {
+        return iterationsStatistics.size();
+    }
 }

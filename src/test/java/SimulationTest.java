@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SimulationTest {
 
-    private static final int BASIC_AGENT_SIZE = 10;
     public static final int BASIC_POPULTION_SIZE = 10;
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
+    private static final int BASIC_AGENT_SIZE = 10;
     private static final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX = Map.of(Strategy.COOPERATIVE, Map.of(Strategy.COOPERATIVE, 100, NONCOOPERATIVE, 0),
             NONCOOPERATIVE, Map.of(COOPERATIVE, 300, NONCOOPERATIVE, 50));
     private static final int STRATEGY_RATIO = 1;
@@ -177,9 +177,38 @@ public class SimulationTest {
         population = simulation.getPopulation();
         assertEquals(BASIC_POPULTION_SIZE, population.getSize());
         assertEquals(BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE, population.getAgentsNumberWithStrategy(COOPERATIVE));
-        assertEquals(BASIC_AGENT_SIZE + numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE), population.getAgentsAsList().get(0).getSize());
+        assertEquals(getCooperativeVsCooperativeAgentSizeAfter(numberOfIterations), population.getAgentsAsList().get(0).getSize());
     }
 
-    //TODO test simulation observers
+    @Test
+    public void testSimulationObserversIntegration() {
+        Simulation simulation = getBasicSimulation();
+        Observer observer = new TotalPopulationValueObserver();
+        simulation.addObserver(observer);
+        assertEquals(0, SimulationStatistics.getNumberOfIterations());
+        int numberOfIterations = 1;
+
+        simulation.run(numberOfIterations);
+
+        assertEquals(numberOfIterations, SimulationStatistics.getNumberOfIterations());
+        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue());
+
+        simulation.run(numberOfIterations);
+
+        assertEquals(2 * numberOfIterations, SimulationStatistics.getNumberOfIterations());
+        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue());
+        assertEquals(getTotalPopulationValueAfterIterations(2 * numberOfIterations), SimulationStatistics.getIteration(2).getTotalPopulationValue());
+
+
+    }
+
+    private int getCooperativeVsCooperativeAgentSizeAfter(int numberOfIterations) {
+        return BASIC_AGENT_SIZE + numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
+    }
+
+    private int getTotalPopulationValueAfterIterations(int numberOfIterations) {
+        return BASIC_POPULTION_SIZE * BASIC_AGENT_SIZE + 2 * numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
+    }
+
     //TODO add more agent selectors
 }

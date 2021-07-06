@@ -2,11 +2,11 @@ package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.observers.Observer;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 public class Simulation {
-    private final Collection<Observer> observers = Collections.emptyList();
+    private final Collection<Observer> observers = new ArrayList<>();
     public Population population;
     private int numberOfIterations = 0;
     private final AgentInteractionResolver agentInteractionResolver;
