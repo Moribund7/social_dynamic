@@ -28,6 +28,7 @@ public class SimulationTest {
             NONCOOPERATIVE, Map.of(COOPERATIVE, 300, NONCOOPERATIVE, 50));
     private static final int STRATEGY_RATIO = 1;
     private static final int BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE = BASIC_POPULTION_SIZE * STRATEGY_RATIO;
+    private static final double DELTA = 0.001;
     @Mock
     Simulation simulation;
     @Mock
@@ -96,8 +97,8 @@ public class SimulationTest {
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
 
         agentInteractionResolver.resolveInteraction(cooperative1, cooperative2);
-        assertEquals(100, cooperative1.getSize());
-        assertEquals(100, cooperative1.getSize());
+        assertEquals(100, cooperative1.getSize(), DELTA);
+        assertEquals(100, cooperative1.getSize(), DELTA);
 
     }
 
@@ -108,13 +109,13 @@ public class SimulationTest {
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
 
         agentInteractionResolver.resolveInteraction(cooperative, nonCooperative);
-        assertEquals(0, cooperative.getSize());
-        assertEquals(300, nonCooperative.getSize());
+        assertEquals(0, cooperative.getSize(), DELTA);
+        assertEquals(300, nonCooperative.getSize(), DELTA);
 
         //check if resolveInteraction is commutative
         agentInteractionResolver.resolveInteraction(nonCooperative, cooperative);
-        assertEquals(0, cooperative.getSize());
-        assertEquals(600, nonCooperative.getSize());
+        assertEquals(0, cooperative.getSize(), DELTA);
+        assertEquals(600, nonCooperative.getSize(), DELTA);
     }
 
     @Test
@@ -124,8 +125,8 @@ public class SimulationTest {
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
 
         agentInteractionResolver.resolveInteraction(nonCooperative1, nonCooperative2);
-        assertEquals(50, nonCooperative1.getSize());
-        assertEquals(50, nonCooperative2.getSize());
+        assertEquals(50, nonCooperative1.getSize(), DELTA);
+        assertEquals(50, nonCooperative2.getSize(), DELTA);
 
     }
 
@@ -159,7 +160,7 @@ public class SimulationTest {
         observer.observe(simulation);
 
         IterationStatistics iterationStatistics = SimulationStatistics.getIteration(1);
-        assertEquals(30, iterationStatistics.getTotalPopulationValue());
+        assertEquals(30, iterationStatistics.getTotalPopulationValue(), DELTA);
     }
 
     @Test
@@ -170,14 +171,14 @@ public class SimulationTest {
         Population population = simulation.getPopulation();
         assertEquals(BASIC_POPULTION_SIZE, population.getSize());
         assertEquals(BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE, population.getAgentsNumberWithStrategy(COOPERATIVE));
-        assertEquals(BASIC_AGENT_SIZE, population.getAgentsAsList().get(0).getSize());
+        assertEquals(BASIC_AGENT_SIZE, population.getAgentsAsList().get(0).getSize(), DELTA);
 
         simulation.run(numberOfIterations);
 
         population = simulation.getPopulation();
         assertEquals(BASIC_POPULTION_SIZE, population.getSize());
         assertEquals(BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE, population.getAgentsNumberWithStrategy(COOPERATIVE));
-        assertEquals(getCooperativeVsCooperativeAgentSizeAfter(numberOfIterations), population.getAgentsAsList().get(0).getSize());
+        assertEquals(getCooperativeVsCooperativeAgentSizeAfter(numberOfIterations), population.getAgentsAsList().get(0).getSize(), DELTA);
     }
 
     @Test
@@ -191,13 +192,13 @@ public class SimulationTest {
         simulation.run(numberOfIterations);
 
         assertEquals(numberOfIterations, SimulationStatistics.getNumberOfIterations());
-        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue());
+        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue(), DELTA);
 
         simulation.run(numberOfIterations);
 
         assertEquals(2 * numberOfIterations, SimulationStatistics.getNumberOfIterations());
-        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue());
-        assertEquals(getTotalPopulationValueAfterIterations(2 * numberOfIterations), SimulationStatistics.getIteration(2).getTotalPopulationValue());
+        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue(), DELTA);
+        assertEquals(getTotalPopulationValueAfterIterations(2 * numberOfIterations), SimulationStatistics.getIteration(2).getTotalPopulationValue(), DELTA);
 
 
     }
@@ -210,5 +211,20 @@ public class SimulationTest {
         return BASIC_POPULTION_SIZE * BASIC_AGENT_SIZE + 2 * numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
     }
 
-    //TODO add more agent selectors
+    @Test
+    public void testSizeDependingAgentSelector() {
+        AgentBuilder agentBuilder = new AgentBuilder();
+        agentBuilder.withStrategy(COOPERATIVE);
+        Agent agent1 = agentBuilder.withSize(10).built();
+        Agent agent2 = agentBuilder.withSize(0).built();
+        Agent agent3 = agentBuilder.withSize(10).built();
+        List<Agent> possibleAgents = List.of(agent1, agent3);
+        Population population = new Population(List.of(agent1, agent2, agent3));
+        AgentSelector agentSelector = new SizeDependingAgentSelector();
+
+        AgentPair agentPair = agentSelector.selectAgentPair(population);
+
+        assertTrue(possibleAgents.contains(agentPair.getFirst()));
+        assertTrue(possibleAgents.contains(agentPair.getSecond()));
+    }
 }

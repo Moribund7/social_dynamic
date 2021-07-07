@@ -20,7 +20,7 @@ public class Agent {
     }
 
 
-    public int getSize() {
+    public double getSize() {
         return size;
     }
 }

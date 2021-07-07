@@ -8,9 +8,9 @@ import com.kowafi.socialDynamics.simulation.Agent;
 import java.util.List;
 
 public class TotalPopulationValueObserver implements Observer {
-    private int totalAgentsSize;
+    private double totalAgentsSize;
 
-    public int getValue() {
+    public double getValue() {
         return totalAgentsSize;
     }
 
@@ -19,7 +19,7 @@ public class TotalPopulationValueObserver implements Observer {
         Population population = simulation.getPopulation();
         List<Agent> agents = population.getAgentsAsList();
 
-        int totalAgentsSize = 0;
+        double totalAgentsSize = 0;
         for (Agent agent : agents) {
             totalAgentsSize += agent.getSize();
         }

@@ -1,13 +1,13 @@
 package com.kowafi.socialDynamics;
 
 public class IterationStatistics {
-    private int totalPopulationValue;
+    private double totalPopulationValue;
 
-    public int getTotalPopulationValue() {
+    public double getTotalPopulationValue() {
         return totalPopulationValue;
     }
 
-    public void setTotalPopulationValue(int totalPopulationValue) {
+    public void setTotalPopulationValue(double totalPopulationValue) {
         this.totalPopulationValue = totalPopulationValue;
     }
 }
