@@ -227,4 +227,13 @@ public class SimulationTest {
         assertTrue(possibleAgents.contains(agentPair.getFirst()));
         assertTrue(possibleAgents.contains(agentPair.getSecond()));
     }
+
+    @Test
+    public void loadConfigFromJson() {
+        ConfigLoader configLoader = new ConfigLoader();
+
+        int size = configLoader.loadConfigFromJson("simulationParameters.json");
+
+        assertEquals(10, size);
+    }
 }
