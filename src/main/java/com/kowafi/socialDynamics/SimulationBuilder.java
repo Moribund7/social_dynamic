@@ -1,5 +1,6 @@
 package com.kowafi.socialDynamics;
 
+import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
 import com.kowafi.socialDynamics.simulation.Strategy;
 
 import java.io.IOException;
@@ -51,6 +52,22 @@ public class SimulationBuilder {
     }
 
     public Simulation build() {
+        validate();
         return new Simulation(populationBuilder.build(), agentInteractionResolver, agentSelector);
+    }
+
+    private void validate() {
+        if (populationBuilder == null || agentInteractionResolver == null || this.agentSelector == null) {
+            throw new MissingSimulationArguments("Validation of simulation arguments failed. One or more arguments are missing. " + this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "SimulationBuilder{" +
+                "populationBuilder=" + populationBuilder +
+                ", agentInteractionResolver=" + agentInteractionResolver +
+                ", agentSelector=" + agentSelector +
+                '}';
     }
 }

@@ -1,4 +1,5 @@
 import com.kowafi.socialDynamics.*;
+import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
 import com.kowafi.socialDynamics.observers.Observer;
 import com.kowafi.socialDynamics.observers.TotalPopulationValueObserver;
 import com.kowafi.socialDynamics.simulation.Agent;
@@ -33,6 +34,10 @@ public class SimulationTest {
     Simulation simulation;
     @Mock
     Population population;
+    @Mock
+    AgentSelector agentSelectorMock;
+    @Mock
+    PopulationBuilder populationBuilder;
 
     private static Simulation getSimulationFromFile() {
         return SimulationBuilder.initializeFromPropertiesFile("aaa");
@@ -228,12 +233,22 @@ public class SimulationTest {
         assertTrue(possibleAgents.contains(agentPair.getSecond()));
     }
 
-    @Test
-    public void loadConfigFromJson() {
-        ConfigLoader configLoader = new ConfigLoader();
+    @Test(expected = MissingSimulationArguments.class)
+    public void testSimulationBuildWithoutAllArguments() {
+        SimulationBuilder simulationBuilder = new SimulationBuilder();
+        simulationBuilder.withAgentSelector(agentSelectorMock);
+        simulationBuilder.withPopulationBuilder(populationBuilder);
 
-        int size = configLoader.loadConfigFromJson("simulationParameters.json");
-
-        assertEquals(10, size);
+        simulationBuilder.build();
     }
+
+
+//    @Test
+//    public void loadConfigFromJson() {
+//        ConfigLoader configLoader = new ConfigLoader();
+//
+//        int size = configLoader.loadConfigFromJson("simulationParameters.json");
+//
+//        assertEquals(10, size);
+//    }
 }
