@@ -1,15 +1,13 @@
 package com.kowafi.socialDynamics;
 
+import com.kowafi.socialDynamics.payoffMatrix.PayoffMatrix;
 import com.kowafi.socialDynamics.simulation.Agent;
-import com.kowafi.socialDynamics.simulation.Strategy;
-
-import java.util.Map;
 
 public class AgentInteractionResolver {
 
-    public final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX;
+    public final PayoffMatrix PAYOFF_MATRIX;
 
-    public AgentInteractionResolver(Map<Strategy, Map<Strategy, Integer>> payoff_matrix) {
+    public AgentInteractionResolver(PayoffMatrix payoff_matrix) {
         PAYOFF_MATRIX = payoff_matrix;
     }
 

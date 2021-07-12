@@ -1,17 +1,16 @@
-import com.kowafi.socialDynamics.*;
+package com.kowafi.socialDynamics;
+
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
 import com.kowafi.socialDynamics.observers.Observer;
 import com.kowafi.socialDynamics.observers.TotalPopulationValueObserver;
 import com.kowafi.socialDynamics.simulation.Agent;
 import com.kowafi.socialDynamics.simulation.AgentBuilder;
-import com.kowafi.socialDynamics.simulation.Strategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.kowafi.socialDynamics.simulation.Strategy.COOPERATIVE;
 import static com.kowafi.socialDynamics.simulation.Strategy.NONCOOPERATIVE;
@@ -20,16 +19,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimulationTest {
+public class SimulationTest extends BaseSimulationTest {
 
-    public static final int BASIC_POPULTION_SIZE = 10;
+    public static final int BASIC_POPULATION_SIZE = 10;
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
     private static final int BASIC_AGENT_SIZE = 10;
-    private static final Map<Strategy, Map<Strategy, Integer>> PAYOFF_MATRIX = Map.of(Strategy.COOPERATIVE, Map.of(Strategy.COOPERATIVE, 100, NONCOOPERATIVE, 0),
-            NONCOOPERATIVE, Map.of(COOPERATIVE, 300, NONCOOPERATIVE, 50));
     private static final int STRATEGY_RATIO = 1;
-    private static final int BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE = BASIC_POPULTION_SIZE * STRATEGY_RATIO;
-    private static final double DELTA = 0.001;
+    private static final int BASIC_POPULATION_COOPERATIVE_AGENTS_SIZE = BASIC_POPULATION_SIZE * STRATEGY_RATIO;
     @Mock
     Simulation simulation;
     @Mock
@@ -46,7 +42,7 @@ public class SimulationTest {
     private static Simulation getBasicSimulation() {
         SimulationBuilder simulationBuilder = new SimulationBuilder();
         PopulationBuilder populationBuilder = new PopulationBuilder().
-                withSize(BASIC_POPULTION_SIZE).
+                withSize(BASIC_POPULATION_SIZE).
                 withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).
                 withAgentSize(BASIC_AGENT_SIZE);
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
@@ -74,10 +70,10 @@ public class SimulationTest {
         PopulationBuilder populationBuilder = new PopulationBuilder();
 
         int STRATEGY_RATIO = 1;
-        Population population = populationBuilder.withSize(BASIC_POPULTION_SIZE).withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).build();
+        Population population = populationBuilder.withSize(BASIC_POPULATION_SIZE).withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).build();
 
-        assertEquals(BASIC_POPULTION_SIZE, population.getSize());
-        int numberOfCooperativeAgents = BASIC_POPULTION_SIZE * STRATEGY_RATIO;
+        assertEquals(BASIC_POPULATION_SIZE, population.getSize());
+        int numberOfCooperativeAgents = BASIC_POPULATION_SIZE * STRATEGY_RATIO;
         assertEquals(numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(COOPERATIVE));
     }
 
@@ -86,10 +82,10 @@ public class SimulationTest {
         PopulationBuilder populationBuilder = new PopulationBuilder();
 
         double COOPERATIVE_RATIO = 0.5;
-        Population population = populationBuilder.withSize(BASIC_POPULTION_SIZE).withStrategyRatio(COOPERATIVE, COOPERATIVE_RATIO).withSecondStrategy(NONCOOPERATIVE).build();
+        Population population = populationBuilder.withSize(BASIC_POPULATION_SIZE).withStrategyRatio(COOPERATIVE, COOPERATIVE_RATIO).withSecondStrategy(NONCOOPERATIVE).build();
 
-        assertEquals(BASIC_POPULTION_SIZE, population.getSize());
-        int numberOfCooperativeAgents = (int) (BASIC_POPULTION_SIZE * COOPERATIVE_RATIO);
+        assertEquals(BASIC_POPULATION_SIZE, population.getSize());
+        int numberOfCooperativeAgents = (int) (BASIC_POPULATION_SIZE * COOPERATIVE_RATIO);
         assertEquals(numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(COOPERATIVE));
 
 
@@ -168,23 +164,7 @@ public class SimulationTest {
         assertEquals(30, iterationStatistics.getTotalPopulationValue(), DELTA);
     }
 
-    @Test
-    public void testBasicSimulationRun() {
-        Simulation simulation = getBasicSimulation();
-        int numberOfIterations = 10;
 
-        Population population = simulation.getPopulation();
-        assertEquals(BASIC_POPULTION_SIZE, population.getSize());
-        assertEquals(BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE, population.getAgentsNumberWithStrategy(COOPERATIVE));
-        assertEquals(BASIC_AGENT_SIZE, population.getAgentsAsList().get(0).getSize(), DELTA);
-
-        simulation.run(numberOfIterations);
-
-        population = simulation.getPopulation();
-        assertEquals(BASIC_POPULTION_SIZE, population.getSize());
-        assertEquals(BASIC_POPULTION_COOPERATIVE_AGENTS_SIZE, population.getAgentsNumberWithStrategy(COOPERATIVE));
-        assertEquals(getCooperativeVsCooperativeAgentSizeAfter(numberOfIterations), population.getAgentsAsList().get(0).getSize(), DELTA);
-    }
 
     @Test
     public void testSimulationObserversIntegration() {
@@ -208,12 +188,10 @@ public class SimulationTest {
 
     }
 
-    private int getCooperativeVsCooperativeAgentSizeAfter(int numberOfIterations) {
-        return BASIC_AGENT_SIZE + numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
-    }
+
 
     private int getTotalPopulationValueAfterIterations(int numberOfIterations) {
-        return BASIC_POPULTION_SIZE * BASIC_AGENT_SIZE + 2 * numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
+        return BASIC_POPULATION_SIZE * BASIC_AGENT_SIZE + 2 * numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
     }
 
     @Test
@@ -241,14 +219,4 @@ public class SimulationTest {
 
         simulationBuilder.build();
     }
-
-
-//    @Test
-//    public void loadConfigFromJson() {
-//        ConfigLoader configLoader = new ConfigLoader();
-//
-//        int size = configLoader.loadConfigFromJson("simulationParameters.json");
-//
-//        assertEquals(10, size);
-//    }
 }
