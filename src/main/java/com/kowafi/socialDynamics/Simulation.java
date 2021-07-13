@@ -33,6 +33,7 @@ public class Simulation {
     public void run(int numberOfIterations) {
         for (int iteration = 0; iteration < numberOfIterations; iteration++) {
             this.numberOfIterations += 1;
+            System.out.println(String.format("Iteration #%s, population %s", numberOfIterations, population)); //TODO add logger
 
             AgentPair agentPair = agentSelector.selectAgentPair(population);
             agentInteractionResolver.resolveInteraction(agentPair.getFirst(), agentPair.getSecond());

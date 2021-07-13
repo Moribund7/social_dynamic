@@ -23,4 +23,12 @@ public class Agent {
     public double getSize() {
         return size;
     }
+
+    @Override
+    public String toString() {
+        return "Agent{" +
+                "strategy=" + strategy +
+                ", size=" + size +
+                '}';
+    }
 }

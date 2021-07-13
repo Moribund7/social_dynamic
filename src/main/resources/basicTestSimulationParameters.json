@@ -1,0 +1,22 @@
+{
+  "population": {
+    "size": 10,
+    "agentSize": 10
+  },
+  "strategy": {
+    "firstStrategyName": "cooperative",
+    "ratio": 0.5,
+    "secondStrategyName": "noncooperative"
+  },
+  "agentSelector": {
+    "name": "SizeDepending"
+  },
+  "agentInteractionResolver": {
+    "payoffMatrix": {
+      "CC": 100,
+      "CN": 100,
+      "NC": 100,
+      "NN": 100
+    }
+  }
+}

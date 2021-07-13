@@ -27,4 +27,11 @@ public class Population {
     public List<Agent> getAgentsAsList() {
         return List.copyOf(population);
     }
+
+    @Override
+    public String toString() {
+        return "Population{" +
+                "population=" + population +
+                '}';
+    }
 }
