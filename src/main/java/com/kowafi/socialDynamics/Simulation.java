@@ -7,19 +7,15 @@ import java.util.Collection;
 
 public class Simulation {
     private final Collection<Observer> observers = new ArrayList<>();
-    public Population population;
-    private int numberOfIterations = 0;
     private final AgentInteractionResolver agentInteractionResolver;
     private final AgentSelector agentSelector;
+    public Population population;
+    private int numberOfIterations = 0;
 
     protected Simulation(Population population, AgentInteractionResolver agentInteractionResolver, AgentSelector agentSelector) {
         this.population = population;
         this.agentInteractionResolver = agentInteractionResolver;
         this.agentSelector = agentSelector;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
     }
 
     public int getNumberOfIterations() {

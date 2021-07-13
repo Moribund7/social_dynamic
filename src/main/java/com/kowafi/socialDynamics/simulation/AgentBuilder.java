@@ -1,5 +1,7 @@
 package com.kowafi.socialDynamics.simulation;
 
+import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
+
 public class AgentBuilder {
 
     private Strategy strategy;
@@ -16,7 +18,14 @@ public class AgentBuilder {
 
 
     public Agent built() {
+        validate();
         return new Agent(strategy, size);
+    }
+
+    private void validate() {
+        if (strategy == null) {
+            throw new MissingSimulationArguments("Strategy not define in Agent Builder");
+        }
     }
 
     public AgentBuilder withSize(int size) {

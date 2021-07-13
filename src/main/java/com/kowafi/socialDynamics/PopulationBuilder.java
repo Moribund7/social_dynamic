@@ -1,5 +1,6 @@
 package com.kowafi.socialDynamics;
 
+import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
 import com.kowafi.socialDynamics.simulation.Agent;
 import com.kowafi.socialDynamics.simulation.AgentBuilder;
 import com.kowafi.socialDynamics.simulation.Strategy;
@@ -37,6 +38,7 @@ public class PopulationBuilder {
 
 
     public Population build() {
+        validate();
         double numberOfAgentWithStrategy = Math.floor(size * ratio);
         for (int i = 0; i < size; i++) {
             if (i < numberOfAgentWithStrategy) {
@@ -48,6 +50,21 @@ public class PopulationBuilder {
         }
 
         return new Population(population);
+    }
+
+    private void validate() {
+        if (strategy == null) {
+            throw new MissingSimulationArguments("Strategy not define in Population Builder");
+        }
+        if (secondStrategy == null) {
+            throw new MissingSimulationArguments("Second strategy not define in Population Builder");
+        }
+        if (size == 0) {
+            throw new MissingSimulationArguments("Population size set to zero");
+        }
+        if (ratio == 0.0) {
+            throw new MissingSimulationArguments("Population ratio set to zero");
+        }
     }
 
     public PopulationBuilder withSecondStrategy(Strategy secondStrategy) {

@@ -25,7 +25,6 @@ public class SimulationTest extends BaseSimulationTest {
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
     private static final int BASIC_AGENT_SIZE = 10;
     private static final int STRATEGY_RATIO = 1;
-    private static final int BASIC_POPULATION_COOPERATIVE_AGENTS_SIZE = BASIC_POPULATION_SIZE * STRATEGY_RATIO;
     @Mock
     Simulation simulation;
     @Mock
@@ -35,16 +34,14 @@ public class SimulationTest extends BaseSimulationTest {
     @Mock
     PopulationBuilder populationBuilder;
 
-    private static Simulation getSimulationFromFile() {
-        return SimulationBuilder.initializeFromPropertiesFile("aaa");
-    }
 
     private static Simulation getBasicSimulation() {
         SimulationBuilder simulationBuilder = new SimulationBuilder();
         PopulationBuilder populationBuilder = new PopulationBuilder().
                 withSize(BASIC_POPULATION_SIZE).
                 withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).
-                withAgentSize(BASIC_AGENT_SIZE);
+                withAgentSize(BASIC_AGENT_SIZE).
+                withSecondStrategy(NONCOOPERATIVE);
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
         AgentSelector agentSelector = new AgentSelectorDummy();
         simulationBuilder.withAgentInteractionResolver(agentInteractionResolver).withAgentSelector(agentSelector).withPopulationBuilder(populationBuilder);
@@ -66,18 +63,6 @@ public class SimulationTest extends BaseSimulationTest {
     }
 
     @Test
-    public void createPopulationWithOneStrategy() {
-        PopulationBuilder populationBuilder = new PopulationBuilder();
-
-        int STRATEGY_RATIO = 1;
-        Population population = populationBuilder.withSize(BASIC_POPULATION_SIZE).withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).build();
-
-        assertEquals(BASIC_POPULATION_SIZE, population.getSize());
-        int numberOfCooperativeAgents = BASIC_POPULATION_SIZE * STRATEGY_RATIO;
-        assertEquals(numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(COOPERATIVE));
-    }
-
-    @Test
     public void createPopulationWithTwoStrategies() {
         PopulationBuilder populationBuilder = new PopulationBuilder();
 
@@ -87,8 +72,7 @@ public class SimulationTest extends BaseSimulationTest {
         assertEquals(BASIC_POPULATION_SIZE, population.getSize());
         int numberOfCooperativeAgents = (int) (BASIC_POPULATION_SIZE * COOPERATIVE_RATIO);
         assertEquals(numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(COOPERATIVE));
-
-
+        assertEquals(BASIC_POPULATION_SIZE - numberOfCooperativeAgents, population.getAgentsNumberWithStrategy(NONCOOPERATIVE));
     }
 
     @Test
@@ -132,14 +116,6 @@ public class SimulationTest extends BaseSimulationTest {
     }
 
     @Test
-    public void testInitializeSimulationFromFile() {
-        Simulation simulation = getSimulationFromFile(); // TODO rename properties file
-        assertEquals(simulation.population.getSize(), 10);
-        assertEquals(simulation.population.getAgentsNumberWithStrategy(COOPERATIVE), 10);
-
-    }
-
-    @Test
     public void runBasicSimulationIterationsCount() {
         Simulation simulation = getBasicSimulation();
 
@@ -155,6 +131,8 @@ public class SimulationTest extends BaseSimulationTest {
         when(simulation.getNumberOfIterations()).thenReturn(1);
         AgentBuilder agentBuilder = new AgentBuilder();
         agentBuilder.withSize(10);
+        agentBuilder.withStrategy(COOPERATIVE);
+
         List<Agent> agentList = List.of(agentBuilder.built(), agentBuilder.built(), agentBuilder.built());
         when(population.getAgentsAsList()).thenReturn(agentList);
 
