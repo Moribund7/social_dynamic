@@ -1,4 +1,4 @@
-package com.kowafi.socialDynamics;
+package com.kowafi.socialDynamics.statistics;
 
 import java.util.ArrayList;
 import java.util.List;

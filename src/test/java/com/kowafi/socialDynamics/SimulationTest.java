@@ -1,8 +1,6 @@
 package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
-import com.kowafi.socialDynamics.observers.Observer;
-import com.kowafi.socialDynamics.observers.TotalPopulationValueObserver;
 import com.kowafi.socialDynamics.simulation.Agent;
 import com.kowafi.socialDynamics.simulation.AgentBuilder;
 import org.junit.Test;
@@ -16,7 +14,6 @@ import static com.kowafi.socialDynamics.simulation.Strategy.COOPERATIVE;
 import static com.kowafi.socialDynamics.simulation.Strategy.NONCOOPERATIVE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimulationTest extends BaseSimulationTest {
@@ -25,10 +22,6 @@ public class SimulationTest extends BaseSimulationTest {
     public static final AgentBuilder AGENT_BUILDER = new AgentBuilder().withSize(0);
     private static final int BASIC_AGENT_SIZE = 10;
     private static final int STRATEGY_RATIO = 1;
-    @Mock
-    Simulation simulation;
-    @Mock
-    Population population;
     @Mock
     AgentSelector agentSelectorMock;
     @Mock
@@ -124,53 +117,6 @@ public class SimulationTest extends BaseSimulationTest {
         assertEquals(10, simulation.getNumberOfIterations());
     }
 
-    @Test
-    public void testBasicObserver() {
-        Observer observer = new TotalPopulationValueObserver();
-        when(simulation.getPopulation()).thenReturn(population);
-        when(simulation.getNumberOfIterations()).thenReturn(1);
-        AgentBuilder agentBuilder = new AgentBuilder();
-        agentBuilder.withSize(10);
-        agentBuilder.withStrategy(COOPERATIVE);
-
-        List<Agent> agentList = List.of(agentBuilder.built(), agentBuilder.built(), agentBuilder.built());
-        when(population.getAgentsAsList()).thenReturn(agentList);
-
-        observer.observe(simulation);
-
-        IterationStatistics iterationStatistics = SimulationStatistics.getIteration(1);
-        assertEquals(30, iterationStatistics.getTotalPopulationValue(), DELTA);
-    }
-
-
-
-    @Test
-    public void testSimulationObserversIntegration() {
-        Simulation simulation = getBasicSimulation();
-        Observer observer = new TotalPopulationValueObserver();
-        simulation.addObserver(observer);
-        assertEquals(0, SimulationStatistics.getNumberOfIterations());
-        int numberOfIterations = 1;
-
-        simulation.run(numberOfIterations);
-
-        assertEquals(numberOfIterations, SimulationStatistics.getNumberOfIterations());
-        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue(), DELTA);
-
-        simulation.run(numberOfIterations);
-
-        assertEquals(2 * numberOfIterations, SimulationStatistics.getNumberOfIterations());
-        assertEquals(getTotalPopulationValueAfterIterations(numberOfIterations), SimulationStatistics.getIteration(1).getTotalPopulationValue(), DELTA);
-        assertEquals(getTotalPopulationValueAfterIterations(2 * numberOfIterations), SimulationStatistics.getIteration(2).getTotalPopulationValue(), DELTA);
-
-
-    }
-
-
-
-    private int getTotalPopulationValueAfterIterations(int numberOfIterations) {
-        return BASIC_POPULATION_SIZE * BASIC_AGENT_SIZE + 2 * numberOfIterations * PAYOFF_MATRIX.get(COOPERATIVE).get(COOPERATIVE);
-    }
 
     @Test
     public void testSizeDependingAgentSelector() {
