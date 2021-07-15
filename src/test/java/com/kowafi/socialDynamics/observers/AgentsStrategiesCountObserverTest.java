@@ -1,9 +1,8 @@
 package com.kowafi.socialDynamics.observers;
 
-import com.kowafi.socialDynamics.Population;
 import com.kowafi.socialDynamics.Simulation;
-import com.kowafi.socialDynamics.simulation.Agent;
-import com.kowafi.socialDynamics.simulation.AgentBuilder;
+import com.kowafi.socialDynamics.population.agent.Agent;
+import com.kowafi.socialDynamics.population.agent.AgentBuilder;
 import com.kowafi.socialDynamics.statistics.IterationStatistics;
 import com.kowafi.socialDynamics.statistics.SimulationStatistics;
 import org.junit.Test;
@@ -22,13 +21,10 @@ import static org.mockito.Mockito.when;
 public class AgentsStrategiesCountObserverTest {
     @Mock
     Simulation simulationMock;
-    @Mock
-    Population populationMock;
 
     @Test
     public void testObserver() {
         Observer observer = new AgentsStrategiesCountObserver();
-        when(simulationMock.getPopulation()).thenReturn(populationMock);
         when(simulationMock.getNumberOfIterations()).thenReturn(1);
         AgentBuilder cooperativeAgentBuilder = new AgentBuilder();
         cooperativeAgentBuilder.withSize(10);
@@ -45,7 +41,7 @@ public class AgentsStrategiesCountObserverTest {
                 cooperativeAgentBuilder.built(),
                 noncooperativeAgentBuilder.built(),
                 noncooperativeAgentBuilder.built());
-        when(populationMock.getAgentsAsList()).thenReturn(agentList);
+        when(simulationMock.getAgentsReadOnly()).thenReturn(agentList);
 
         observer.observe(simulationMock);
 

@@ -1,6 +1,7 @@
 package com.kowafi.socialDynamics;
 
-import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.population.Population;
+import com.kowafi.socialDynamics.population.agent.Agent;
 import org.junit.Test;
 
 import static com.kowafi.socialDynamics.simulation.Strategy.COOPERATIVE;
@@ -37,7 +38,7 @@ public class SimulationIntegrationTest extends BaseSimulationTest {
     }
 
     private Double getActualCumulativeSizeOfPopulation(Population population) {
-        return population.getAgentsAsList().stream().map(Agent::getSize).reduce(Double::sum).orElse(-42.0); // wrong value
+        return population.getAgentsReadOnly().stream().map(Agent::getSize).reduce(Double::sum).orElse(-42.0); // wrong value
     }
 
 

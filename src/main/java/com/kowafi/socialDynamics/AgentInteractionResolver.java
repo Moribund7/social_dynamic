@@ -1,7 +1,7 @@
 package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.payoffMatrix.PayoffMatrix;
-import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.population.agent.Agent;
 
 public class AgentInteractionResolver {
 

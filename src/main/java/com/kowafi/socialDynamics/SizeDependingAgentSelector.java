@@ -1,6 +1,7 @@
 package com.kowafi.socialDynamics;
 
-import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.population.Population;
+import com.kowafi.socialDynamics.population.agent.Agent;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.sampling.DiscreteProbabilityCollectionSampler;
 import org.apache.commons.rng.simple.RandomSource;
@@ -14,7 +15,7 @@ public class SizeDependingAgentSelector implements AgentSelector {
     public AgentPair selectAgentPair(Population population) {
         UniformRandomProvider rng = RandomSource.create(RandomSource.MT); // TODO add as injection
 
-        Map<Agent, Double> agentSizeMap = population.getAgentsAsList().stream().collect(Collectors.toMap((a) -> (a), Agent::getSize));
+        Map<Agent, Double> agentSizeMap = population.getAgentsReadOnly().stream().collect(Collectors.toMap((a) -> (a), Agent::getSize));
 
         DiscreteProbabilityCollectionSampler<Agent> discreteProbabilityCollectionSampler = new DiscreteProbabilityCollectionSampler<>(rng, agentSizeMap);
 

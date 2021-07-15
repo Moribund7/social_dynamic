@@ -1,16 +1,16 @@
-package com.kowafi.socialDynamics;
+package com.kowafi.socialDynamics.population;
 
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
-import com.kowafi.socialDynamics.simulation.Agent;
-import com.kowafi.socialDynamics.simulation.AgentBuilder;
+import com.kowafi.socialDynamics.population.agent.Agent;
+import com.kowafi.socialDynamics.population.agent.AgentBuilder;
 import com.kowafi.socialDynamics.simulation.Strategy;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PopulationBuilder {
 
-    private final Collection<Agent> population = new HashSet<>();
+    private final List<Agent> population = new ArrayList<>();
     private int size;
     private Strategy strategy;
     private double ratio;

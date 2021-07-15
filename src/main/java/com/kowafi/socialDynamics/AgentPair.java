@@ -1,6 +1,6 @@
 package com.kowafi.socialDynamics;
 
-import com.kowafi.socialDynamics.simulation.Agent;
+import com.kowafi.socialDynamics.population.agent.Agent;
 
 public class AgentPair {
     private final Agent agent1;

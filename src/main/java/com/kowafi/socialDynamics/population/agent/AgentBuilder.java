@@ -1,11 +1,13 @@
-package com.kowafi.socialDynamics.simulation;
+package com.kowafi.socialDynamics.population.agent;
 
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
+import com.kowafi.socialDynamics.simulation.Strategy;
 
 public class AgentBuilder {
 
     private Strategy strategy;
     private int size;
+    private int nextAgentId = 0;
 
     public AgentBuilder() {
     }
@@ -19,7 +21,9 @@ public class AgentBuilder {
 
     public Agent built() {
         validate();
-        return new Agent(strategy, size);
+        Agent newAgent = new Agent(strategy, size, nextAgentId);
+        nextAgentId += 1;
+        return newAgent;
     }
 
     private void validate() {

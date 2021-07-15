@@ -1,6 +1,7 @@
 package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
+import com.kowafi.socialDynamics.population.PopulationBuilder;
 
 public class SimulationBuilder {
     private PopulationBuilder populationBuilder;

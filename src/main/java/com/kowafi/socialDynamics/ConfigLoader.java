@@ -2,6 +2,7 @@ package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.payoffMatrix.PayoffMatrix;
 import com.kowafi.socialDynamics.payoffMatrix.PayoffMatrixBuilder;
+import com.kowafi.socialDynamics.population.PopulationBuilder;
 import com.kowafi.socialDynamics.simulation.Strategy;
 import org.json.JSONObject;
 

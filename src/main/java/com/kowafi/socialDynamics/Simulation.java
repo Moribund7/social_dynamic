@@ -1,6 +1,8 @@
 package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.observers.Observer;
+import com.kowafi.socialDynamics.population.Population;
+import com.kowafi.socialDynamics.population.agent.Agent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +11,7 @@ public class Simulation {
     private final Collection<Observer> observers = new ArrayList<>();
     private final AgentInteractionResolver agentInteractionResolver;
     private final AgentSelector agentSelector;
-    public Population population;
+    private final Population population;
     private int numberOfIterations = 0;
 
     protected Simulation(Population population, AgentInteractionResolver agentInteractionResolver, AgentSelector agentSelector) {
@@ -42,5 +44,9 @@ public class Simulation {
                 observer.observe(this);
             }
         }
+    }
+
+    public Collection<Agent> getAgentsReadOnly() {
+        return population.getAgentsReadOnly();
     }
 }

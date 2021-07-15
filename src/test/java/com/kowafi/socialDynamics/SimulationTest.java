@@ -1,8 +1,10 @@
 package com.kowafi.socialDynamics;
 
 import com.kowafi.socialDynamics.exceptions.MissingSimulationArguments;
-import com.kowafi.socialDynamics.simulation.Agent;
-import com.kowafi.socialDynamics.simulation.AgentBuilder;
+import com.kowafi.socialDynamics.population.Population;
+import com.kowafi.socialDynamics.population.PopulationBuilder;
+import com.kowafi.socialDynamics.population.agent.Agent;
+import com.kowafi.socialDynamics.population.agent.AgentBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -30,16 +32,20 @@ public class SimulationTest extends BaseSimulationTest {
 
     private static Simulation getBasicSimulation() {
         SimulationBuilder simulationBuilder = new SimulationBuilder();
-        PopulationBuilder populationBuilder = new PopulationBuilder().
-                withSize(BASIC_POPULATION_SIZE).
-                withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).
-                withAgentSize(BASIC_AGENT_SIZE).
-                withSecondStrategy(NONCOOPERATIVE);
+        PopulationBuilder populationBuilder = getBasicPopulationBuilder();
         AgentInteractionResolver agentInteractionResolver = new AgentInteractionResolver(PAYOFF_MATRIX);
         AgentSelector agentSelector = new AgentSelectorDummy();
         simulationBuilder.withAgentInteractionResolver(agentInteractionResolver).withAgentSelector(agentSelector).withPopulationBuilder(populationBuilder);
 
         return simulationBuilder.build();
+    }
+
+    private static PopulationBuilder getBasicPopulationBuilder() {
+        return new PopulationBuilder().
+                withSize(BASIC_POPULATION_SIZE).
+                withStrategyRatio(COOPERATIVE, STRATEGY_RATIO).
+                withAgentSize(BASIC_AGENT_SIZE).
+                withSecondStrategy(NONCOOPERATIVE);
     }
 
     @Test
