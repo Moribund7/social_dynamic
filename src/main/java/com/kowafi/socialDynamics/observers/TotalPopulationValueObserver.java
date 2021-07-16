@@ -7,21 +7,13 @@ import com.kowafi.socialDynamics.statistics.SimulationStatistics;
 import java.util.Collection;
 
 public class TotalPopulationValueObserver implements Observer {
-    private double totalAgentsSize;
 
-    public double getValue() {
-        return totalAgentsSize;
-    }
 
     @Override
     public void observe(Simulation simulation) {
         Collection<Agent> agents = simulation.getAgentsReadOnly();
 
-        double totalAgentsSize = 0;
-        for (Agent agent : agents) {
-            totalAgentsSize += agent.getSize();
-        }
-        this.totalAgentsSize = totalAgentsSize; //TODO use streams
+        double totalAgentsSize = agents.stream().mapToDouble(Agent::getSize).reduce(Double::sum).orElse(0);
 
         SimulationStatistics.getIteration(simulation.getNumberOfIterations()).setTotalPopulationValue(totalAgentsSize);
     }

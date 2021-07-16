@@ -3,11 +3,15 @@ package com.kowafi.socialDynamics;
 import com.kowafi.socialDynamics.observers.Observer;
 import com.kowafi.socialDynamics.population.Population;
 import com.kowafi.socialDynamics.population.agent.Agent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Simulation {
+    private final static Logger LOGGER = LoggerFactory.getLogger(Simulation.class);
+
     private final Collection<Observer> observers = new ArrayList<>();
     private final AgentInteractionResolver agentInteractionResolver;
     private final AgentSelector agentSelector;
@@ -35,7 +39,7 @@ public class Simulation {
     public void run(int numberOfIterations) {
         for (int iteration = 0; iteration < numberOfIterations; iteration++) {
             this.numberOfIterations += 1;
-            System.out.println(String.format("Iteration #%s, population %s", numberOfIterations, population)); //TODO add logger
+            LOGGER.info("Iteration #{}, population {}", numberOfIterations, population);
 
             AgentPair agentPair = agentSelector.selectAgentPair(population);
             agentInteractionResolver.resolveInteraction(agentPair.getFirst(), agentPair.getSecond());
