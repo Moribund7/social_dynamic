@@ -12,17 +12,13 @@ public class AgentsStrategiesCountObserver implements Observer {
     @Override
     public void observe(Simulation simulation) {
         Collection<Agent> agents = simulation.getAgentsReadOnly();
-        List<Strategy> strategiesInSimulation = getAvaliableStrategies();
+        List<Strategy> strategiesInSimulation = Simulation.getAvailableStrategies();
 
         for (Strategy strategy : strategiesInSimulation) {
             long agentsCount = agents.stream().filter((a) -> a.getStrategy().equals(strategy)).count();
             SimulationStatistics.getIteration(simulation.getNumberOfIterations()).setAgentsWithStrategyCount(strategy, agentsCount);
 
         }
-    }
-
-    private List<Strategy> getAvaliableStrategies() {
-        return List.of(Strategy.COOPERATIVE, Strategy.NONCOOPERATIVE); // TODO this should be in simulation
     }
 
 }

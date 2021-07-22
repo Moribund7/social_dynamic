@@ -3,11 +3,13 @@ package com.kowafi.socialDynamics;
 import com.kowafi.socialDynamics.observers.Observer;
 import com.kowafi.socialDynamics.population.Population;
 import com.kowafi.socialDynamics.population.agent.Agent;
+import com.kowafi.socialDynamics.simulation.Strategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Simulation {
     private final static Logger LOGGER = LoggerFactory.getLogger(Simulation.class);
@@ -22,6 +24,10 @@ public class Simulation {
         this.population = population;
         this.agentInteractionResolver = agentInteractionResolver;
         this.agentSelector = agentSelector;
+    }
+
+    public static List<Strategy> getAvailableStrategies() {
+        return List.of(Strategy.COOPERATIVE, Strategy.NONCOOPERATIVE); // TODO this should loaded from configs
     }
 
     public int getNumberOfIterations() {
